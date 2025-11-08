@@ -9,7 +9,7 @@ class ToDoController:
         service_data = self.todoService.get_todos()
         return {"todos": service_data}
 
-    def create():
+    def create(self):
         return {"message": "creating a todo"}
 
 

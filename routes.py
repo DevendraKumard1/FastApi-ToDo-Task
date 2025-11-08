@@ -12,4 +12,4 @@ def list_todos():
 
 # ToDo routes
 router.get("/")(todo_controller.list_todos)
-# router.post("/todo")(todo_controller.create)
+router.post("/todo")(todo_controller.create)
