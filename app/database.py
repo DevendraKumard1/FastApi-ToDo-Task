@@ -8,6 +8,9 @@ engine = create_engine(SQLALCHAMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
-def register_models():
-    import app.schemas.User
-    import app.schemas.ToDo
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

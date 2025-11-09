@@ -4,7 +4,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from logging.config import fileConfig
 from sqlalchemy import engine_from_config, pool
 from alembic import context
-from app.database import Base, register_models
 
 # Now import Base and engine from your app folder
 from app.database import Base, engine
@@ -13,8 +12,6 @@ config = context.config
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
-
-    register_models()
 
 # Use your models' metadata for autogenerate
 target_metadata = Base.metadata
