@@ -1,14 +1,24 @@
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from logging.config import fileConfig
 from sqlalchemy import engine_from_config, pool
 from alembic import context
 
-# Now import Base and engine from your app folder
-from app.database import Base, engine
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from app.database import Base
+from app.core.config import get_settings
 
 config = context.config
+
+# Load settings
+settings = get_settings()
+SQLALCHEMY_DATABASE_URL = (
+    f"mysql+pymysql://{settings.DB_USER}:{settings.DB_PASSWORD}"
+    f"@{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}"
+)
+
+config.set_main_option("sqlalchemy.url", SQLALCHEMY_DATABASE_URL)
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
@@ -28,7 +38,11 @@ def run_migrations_offline():
         context.run_migrations()
 
 def run_migrations_online():
-    connectable = engine
+    connectable = engine_from_config(
+        config.get_section(config.config_ini_section),
+        prefix="sqlalchemy.",
+        poolclass=pool.NullPool,
+    )
     with connectable.connect() as connection:
         context.configure(
             connection=connection,

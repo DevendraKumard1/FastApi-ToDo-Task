@@ -1,9 +1,12 @@
 # Byte-compiled / optimized / DLL files
 *.py[cod]
 *$py.class
-__pycache__
+__pycache__/
+*.pyc
 
 # Virtual environment
 vendor/
 
 .DS_Store
+
+.env

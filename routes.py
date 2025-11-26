@@ -1,18 +1,18 @@
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 from app.database import get_db
-from Services.ToDoService import ToDoService
-from Controllers.ToDoController import ToDoController
+from app.services.todo_service import TodoService
+from app.controllers.todo_controller import TodoController
 from app.schemas.ToDoSchema import ToDoCreateSchema
 
 router = APIRouter()
 
-todo_service = ToDoService()
-todo_controller = ToDoController(todo_service) 
+todo_service = TodoService()
+todo_controller = TodoController(todo_service) 
 
 # ToDo routes
 @router.get("/")
-def list_todos(db: Session = Depends(get_db), offset: int = Query(0, ge=0), limit: int = Query(10, ge=1) ):
+def list_todos(db: Session = Depends(get_db), offset: int = Query(0, ge=0), limit: int = Query(10, ge=1)):
     return todo_controller.list_todos(db, offset, limit)
 
 @router.get("/assignee")

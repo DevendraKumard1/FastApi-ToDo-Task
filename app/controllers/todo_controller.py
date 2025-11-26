@@ -1,17 +1,17 @@
-from Services.ToDoService import ToDoService
-from fastapi import HTTPException
+from app.services.todo_service import TodoService
+from fastapi import HTTPException, Request
 from app.schemas.ToDoSchema import ToDoCreateSchema, TodoResponse
 from sqlalchemy.orm import Session
 import pendulum
 
-class ToDoController:
+class TodoController:
     
-    def __init__(self, todoService: ToDoService):
-        self.todoService = todoService
+    def __init__(self, todo_service: TodoService):
+        self.todo_service = todo_service
         
     def list_todos(self, db: Session, offset, limit):
         try:
-            todo_record = self.todoService.get_todos(db, offset, limit)
+            todo_record = self.todo_service.get_todos(db, offset, limit)
 
             todos_list = todo_record["data"]
             formatted_todos = []
@@ -44,7 +44,7 @@ class ToDoController:
     
     def list_assignee(self, db: Session):
         try:
-            assignee = self.todoService.get_assignee(db)
+            assignee = self.todo_service.get_assignee(db)
             return {
                 "status": 200,
                 "message": "Assignee fetched successfully",
@@ -55,7 +55,7 @@ class ToDoController:
 
     def create(self, todo_data: ToDoCreateSchema, db: Session):
         try:
-            created_todo = self.todoService.insert_records(todo_data.dict(), db)
+            created_todo = self.todo_service.insert_records(todo_data.dict(), db)
             
             if not created_todo:
                 raise HTTPException(status_code=500, detail="Something went wrong while creating the todo")
