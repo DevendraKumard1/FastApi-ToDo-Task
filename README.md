@@ -5,10 +5,6 @@ A simple Todo Task project.
 ## Table of Contents
 
 - [Installation](#installation)
-- [Usage](#usage)
-- [API Endpoints](#api-endpoints)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Installation
 
