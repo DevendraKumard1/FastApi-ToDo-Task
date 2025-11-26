@@ -1,5 +1,5 @@
-from app.models.ToDo import ToDo
-from app.models.User import User
+from app.models.todo import ToDo
+from app.models.user import User
 from sqlalchemy import desc
 from sqlalchemy.orm import joinedload
 import uuid

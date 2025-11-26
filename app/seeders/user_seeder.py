@@ -1,6 +1,6 @@
 # seeders/todo_seeder.py
 from sqlalchemy.orm import Session
-from app.models.User import User
+from app.models.user import User
 
 def seed_users(db: Session):
     users = [

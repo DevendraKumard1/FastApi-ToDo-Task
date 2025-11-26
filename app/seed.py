@@ -1,6 +1,6 @@
 # seed.py
 from app.database import SessionLocal
-from app.seeders.UserSeeder import seed_users
+from app.seeders.user_seeder import seed_users
 
 def run_seeders():
     db = SessionLocal()

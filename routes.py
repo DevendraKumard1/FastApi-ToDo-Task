@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.services.todo_service import TodoService
 from app.controllers.todo_controller import TodoController
-from app.schemas.ToDoSchema import ToDoCreateSchema
+from app.schemas.todo_schema import ToDoCreateSchema
 
 router = APIRouter()
 

@@ -1,6 +1,6 @@
 from app.services.todo_service import TodoService
 from fastapi import HTTPException, Request
-from app.schemas.ToDoSchema import ToDoCreateSchema, TodoResponse
+from app.schemas.todo_schema import ToDoCreateSchema, TodoResponse
 from sqlalchemy.orm import Session
 import pendulum
 
