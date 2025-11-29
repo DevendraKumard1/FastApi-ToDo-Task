@@ -1,0 +1,23 @@
+# App settings
+APP_NAME=Todo App
+APP_ENV=local
+DEBUG=True
+
+# Server
+HOST=127.0.0.1
+PORT=8000
+
+# Database
+DB_USER=root
+DB_PASSWORD=1234
+DB_HOST=localhost
+DB_PORT=3307
+DB_NAME=todo_python_db
+
+# JWT / Security
+SECRET_KEY=7c159336ef408fd85edb1c50a003815e5089059342d6ff0b7ebec3c22037ab73
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=1440
+
+# Optional
+REDIS_URL=redis://localhost:6379/0

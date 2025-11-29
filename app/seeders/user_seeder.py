@@ -1,22 +1,17 @@
-# seeders/todo_seeder.py
-from sqlalchemy.orm import Session
+# app/seeders/user_seeder.py
+
 from app.models.user import User
 
-def seed_users(db: Session):
+def seed_users(db):
     users = [
-        {
-            "username": "Devendra Kumar",
-            "email": "devendra.k@academixs.com",
-        },
-        {
-            "username": "Saurabh Shukla",
-            "email": "saurabh.s@academixs.com",
-        }
+        {"username": "Test User", "email": "test.u@academixs.com", "password": "123456"},
+        {"username": "Saurabh Shukla", "email": "saurabh.s@academixs.com", "password": "123456"},
+        {"username": "Devendra Kumar", "email": "devendra.k@academixs.com", "password": "123456"},
+        {"username": "Kapil Savita", "email": "kapil.s@academixs.com", "password": "123456"},
     ]
 
-    for user in users:
-        user = User(**user)
-        db.add(user)
-    
+    for data in users:
+        db.add(User(**data))
+
     db.commit()
-    print(f"{len(users)} users seeded successfully!")
+    print("✅ Users seeded successfully")

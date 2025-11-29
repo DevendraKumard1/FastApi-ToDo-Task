@@ -1,4 +1,9 @@
 fastapi
 uvicorn
 sqlalchemy
+pydantic
+pydantic[email]
 alembic
+pymysql
+python-dotenv
+pendulum
