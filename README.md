@@ -23,6 +23,19 @@ pip install -r requirements.txt
 
 4. **Run Server**:
 uvicorn main:app --reload
+or
+uvicorn index:app --reload
 
 5. **Open in Browser**:
 http://127.0.0.1:8000/docs
+
+6. **Seed run via command**:
+python -m app.seed
+
+7. **Migration via command**:
+# alembic revision --autogenerate -m "initial"
+# or
+# alembic revision --autogenerate -m "create users and todos table"
+# or
+# alembic upgrade head
+
