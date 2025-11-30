@@ -60,16 +60,18 @@ class TodoService:
         db.refresh(todo)
         return todo
 
-    def revoke_todo(self, todo_id: int, db: Session) -> Optional[Todo]:
-        # Mark the todo as revoked by updating status
-        todo = db.query(Todo).filter(Todo.id == todo_id, Todo.deleted_at.is_(None)).first()
+    def revoke(self, todo_id: int, db: Session):
+        todo = db.query(Todo).filter(Todo.id == todo_id).first()
+
         if not todo:
-            return None
+            raise Exception("Todo not found")
+
         todo.status = "revoked"
-        db.add(todo)
         db.commit()
         db.refresh(todo)
+
         return todo
+
 
     def assign_todo_to_user(self, todo_id: int, user_id: int, db: Session) -> Optional[Todo]:
         # Assign a todo to a user
