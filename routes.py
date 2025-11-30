@@ -13,7 +13,7 @@ todo_controller = TodoController(todo_service)
 # -----------------------------------------------------
 # LIST WITH FILTERS
 # -----------------------------------------------------
-@router.get("/")
+@router.get("/todo/list")
 def list_todos(request: Request, db: Session = Depends(get_db)):
     return todo_controller.list_todos(db, request)
 

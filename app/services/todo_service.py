@@ -11,6 +11,8 @@ class TodoService:
         db: Session,
        **filters
     ):
+        offset = filters.get("offset") or 0
+        limit = filters.get("limit") or 10
         query = db.query(Todo).options(joinedload(Todo.user, innerjoin=True))
 
         if filters.get("titleFilter"):
@@ -25,13 +27,13 @@ class TodoService:
             query = query.filter(Todo.scheduled_date == filters["scheduledDateFilter"])
 
         total = query.count()
-        query = query.order_by(desc(Todo.created_at)).offset(filters['offset']).limit(filters['limit'])
+        query = query.order_by(desc(Todo.created_at)).offset(offset).limit(limit)
         todos = query.all()
 
         return {
             "total": total,
-            "offset": filters['offset'],
-            "limit": filters['limit'],
+            "offset":  offset,
+            "limit":  limit,
             "data": todos
         }
 
