@@ -1,59 +1,39 @@
-from sqlalchemy.orm import Session
-from sqlalchemy import select, func, or_, and_
+from sqlalchemy.orm import Session, joinedload
+from sqlalchemy import desc
 from typing import Optional
 from app.models.todo import Todo
 from app.models.user import User
-from datetime import date, datetime
 import uuid
 
 class TodoService:
     def get_todos(
         self,
         db: Session,
-        offset: int = 0,
-        limit: int = 10,
-        status: Optional[str] = None,
-        priority: Optional[str] = None,
-        user_id: Optional[int] = None,
-        search: Optional[str] = None,
-        start_date: Optional[date] = None,
-        end_date: Optional[date] = None,
-        include_deleted: bool = False,
+       **filters
     ):
-        """
-        Returns dict: { total, offset, limit, data }
-        """
-        q = db.query(Todo)
+        query = db.query(Todo).options(joinedload(Todo.user, innerjoin=True))
 
-        if not include_deleted:
-            q = q.filter(Todo.deleted_at.is_(None))
+        if filters.get("titleFilter"):
+            query = query.filter(Todo.title.ilike(f"%{filters['titleFilter']}%"))
+        if filters.get("assigneeFilter"):
+            query = query.filter(Todo.user_id == filters["assigneeFilter"])
+        if filters.get("statusFilter"):
+            query = query.filter(Todo.status == filters["statusFilter"])
+        if filters.get("priorityFilter"):
+            query = query.filter(Todo.priority == filters["priorityFilter"])
+        if filters.get("scheduledDateFilter"):
+            query = query.filter(Todo.scheduled_date == filters["scheduledDateFilter"])
 
-        if status:
-            q = q.filter(Todo.status == status)
+        total = query.count()
+        query = query.order_by(desc(Todo.created_at)).offset(filters['offset']).limit(filters['limit'])
+        todos = query.all()
 
-        if priority:
-            q = q.filter(Todo.priority == priority)
-
-        if user_id:
-            q = q.filter(Todo.user_id == user_id)
-
-        if start_date and end_date:
-            q = q.filter(Todo.scheduled_date.between(start_date, end_date))
-        elif start_date:
-            q = q.filter(Todo.scheduled_date >= start_date)
-        elif end_date:
-            q = q.filter(Todo.scheduled_date <= end_date)
-
-        if search:
-            like = f"%{search}%"
-            q = q.filter(or_(Todo.title.ilike(like), Todo.description.ilike(like)))
-
-        total = q.with_entities(func.count()).scalar() or 0
-
-        q = q.order_by(Todo.scheduled_date.desc(), Todo.created_at.desc()).offset(offset).limit(limit)
-        results = q.all()
-
-        return {"total": total, "offset": offset, "limit": limit, "data": results}
+        return {
+            "total": total,
+            "offset": filters['offset'],
+            "limit": filters['limit'],
+            "data": todos
+        }
 
     def insert_records(self, payload: dict, db: Session) -> Todo:
         # Generate UUID for new todo
@@ -77,22 +57,6 @@ class TodoService:
         db.commit()
         db.refresh(todo)
         return todo
-
-    def delete_todo(self, todo_id: int, db: Session, hard: bool = False) -> bool:
-        todo = db.query(Todo).filter(Todo.id == todo_id).first()
-        if not todo:
-            return False
-
-        if hard:
-            db.delete(todo)
-            db.commit()
-            return True
-
-        # Soft delete
-        todo.deleted_at = datetime.utcnow()
-        db.add(todo)
-        db.commit()
-        return True
 
     def revoke_todo(self, todo_id: int, db: Session) -> Optional[Todo]:
         # Mark the todo as revoked by updating status

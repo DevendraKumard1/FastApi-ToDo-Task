@@ -14,4 +14,4 @@ def seed_users(db):
         db.add(User(**data))
 
     db.commit()
-    print("✅ Users seeded successfully")
+    print("Users seeded successfully")

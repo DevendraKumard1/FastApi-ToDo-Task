@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 from datetime import date, datetime
 from typing import Optional
 
@@ -12,19 +12,19 @@ class TodoCreateSchema(BaseModel):
     status: Optional[str] = Field("pending", description="Status: pending, in-progress, completed, revoked")
     description: Optional[str] = None
 
-    @validator("priority")
-    def validate_priority(cls, v):
+    @field_validator("priority")
+    def validate_priority(cls, validate):
         allowed = ["low", "medium", "high"]
-        if v not in allowed:
+        if validate not in allowed:
             raise ValueError(f"priority must be one of {allowed}")
-        return v
+        return validate
 
-    @validator("status")
-    def validate_status(cls, v):
+    @field_validator("status")
+    def validate_status(cls, validate):
         allowed = ["pending", "in-progress", "completed", "revoked"]
-        if v not in allowed:
+        if validate not in allowed:
             raise ValueError(f"status must be one of {allowed}")
-        return v
+        return validate
 
 
 class TodoUpdateSchema(BaseModel):
@@ -34,23 +34,23 @@ class TodoUpdateSchema(BaseModel):
     status: Optional[str] = None
     description: Optional[str] = None
 
-    @validator("priority")
-    def validate_priority(cls, v):
-        if v is None:
-            return v
+    @field_validator("priority")
+    def validate_priority(cls, validate):
+        if validate is None:
+            return validate
         allowed = ["low", "medium", "high"]
-        if v not in allowed:
+        if validate not in allowed:
             raise ValueError(f"priority must be one of {allowed}")
-        return v
+        return validate
 
-    @validator("status")
-    def validate_status(cls, v):
-        if v is None:
-            return v
+    @field_validator("status")
+    def validate_status(cls, validate):
+        if validate is None:
+            return validate
         allowed = ["pending", "in-progress", "completed", "revoked"]
-        if v not in allowed:
+        if validate not in allowed:
             raise ValueError(f"status must be one of {allowed}")
-        return v
+        return validate
 
 
 class TodoResponse(BaseModel):
