@@ -87,11 +87,7 @@ class TodoController:
     # ------------------------------
     def revoke(self, todo_id: int, db: Session):
         try:
-            # Update status to 'revoked'
-            revoked_todo = self.todo_service.update_todo(todo_id, db)
-
-            if not revoked_todo:
-                raise HTTPException(status_code=404, detail="Todo not found")
+            revoked_todo = self.todo_service.revoke(todo_id, db)
             return {
                 "status": 200,
                 "message": "Todo revoked successfully",
@@ -99,3 +95,5 @@ class TodoController:
             }
         except Exception as e:
             raise HTTPException(status_code=400, detail=f"Error revoking todo: {e}")
+
+

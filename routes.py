@@ -34,7 +34,7 @@ def create_todo(todo_data: TodoCreateSchema, db: Session = Depends(get_db)):
 # -----------------------------------------------------
 # GET SINGLE TODO
 # -----------------------------------------------------
-@router.get("/{todo_id}")
+@router.get("/todo/{todo_id}")
 def show_todo(
     todo_id: int = Path(..., description="ID of the todo"),
     db: Session = Depends(get_db)
@@ -55,7 +55,7 @@ def update_todo(
 # -----------------------------------------------------
 # DELETE TODO (SOFT DELETE)
 # -----------------------------------------------------
-@router.delete("/{todo_id}")
+@router.delete("todo/{todo_id}")
 def delete_todo(
     todo_id: int,
     db: Session = Depends(get_db)
@@ -65,9 +65,10 @@ def delete_todo(
 # -----------------------------------------------------
 # REVOKE (change status to revoked)
 # -----------------------------------------------------
-@router.put("/{todo_id}/revoke")
+@router.put("/todo/{todo_id}/revoke")
 def revoke_todo(
-    todo_id: int,
+    todo_id: int, 
     db: Session = Depends(get_db)
 ):
     return todo_controller.revoke(todo_id, db)
+
