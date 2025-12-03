@@ -7,3 +7,6 @@ alembic
 pymysql
 python-dotenv
 pendulum
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
