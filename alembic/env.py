@@ -8,6 +8,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from app.database import Base
 from app.core.config import get_settings
+import app.models #Don't remove this line line imports all the models via __init__.py in models
 
 config = context.config
 

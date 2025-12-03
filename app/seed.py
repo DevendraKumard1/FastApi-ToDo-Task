@@ -14,7 +14,7 @@ from app.seeders.user_seeder import seed_users
 def run_seeders():
     db = SessionLocal()
 
-    print("⏳ Seeding started...")
+    print("Seeding started...")
 
     seed_users(db)   # must run first
 
