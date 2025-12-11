@@ -3,7 +3,7 @@ from sqlalchemy.dialects.mysql import CHAR
 from sqlalchemy.orm import relationship
 from app.database import Base
 
-class Todo(Base):
+class ToDo(Base):
     __tablename__ = "todos"
 
     id = Column(Integer, primary_key=True, index=True)
