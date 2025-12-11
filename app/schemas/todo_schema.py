@@ -1,11 +1,10 @@
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic_core import PydanticCustomError
 from datetime import date, datetime
 from typing import Optional
 
-
 class TodoCreateSchema(BaseModel):
     user_id: int
-    uuid: str = None  # UUID will be generated in service, so optional here
     title: str = Field(..., min_length=2)
     scheduled_date: date = Field(..., description="Date when todo is scheduled")
     priority: str = Field("low", description="Priority must be: low, medium, high")
@@ -16,17 +15,11 @@ class TodoCreateSchema(BaseModel):
     def validate_priority(cls, validate):
         allowed = ["low", "medium", "high"]
         if validate not in allowed:
-            raise ValueError(f"priority must be one of {allowed}")
+            raise PydanticCustomError(
+                "priority.invalid",
+                f"Priority must be one of {allowed}"
+            )
         return validate
-        
-
-    @field_validator("status")
-    def validate_status(cls, validate):
-        allowed = ["pending", "in-progress", "completed", "hold", "revoked"]
-        if validate not in allowed:
-            raise ValueError(f"status must be one of {allowed}")
-        return validate
-
 
 class TodoUpdateSchema(BaseModel):
     title: Optional[str] = Field(None, min_length=2)
@@ -41,16 +34,22 @@ class TodoUpdateSchema(BaseModel):
             return validate
         allowed = ["low", "medium", "high"]
         if validate not in allowed:
-            raise ValueError(f"priority must be one of {allowed}")
+            raise PydanticCustomError(
+                "priority.invalid",
+                f"Priority must be one of {allowed}"
+            )
         return validate
 
     @field_validator("status")
     def validate_status(cls, validate):
         if validate is None:
             return validate
-        allowed = ["pending", "in-progress", "completed", "hold", "revoked"]
+        allowed = ["pending", "in_progress", "completed", "hold", "revoked"]
         if validate not in allowed:
-            raise ValueError(f"status must be one of {allowed}")
+            raise PydanticCustomError(
+                "status.invalid",
+                f"Status must be one of {allowed}"
+            )
         return validate
 
 
@@ -67,6 +66,5 @@ class TodoResponse(BaseModel):
     updated_at: datetime
     deleted_at: Optional[datetime]
 
-    class Config:
-        orm_mode = True
-        from_attributes = True
+    model_config = {"from_attributes": True}
+

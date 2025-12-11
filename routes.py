@@ -2,13 +2,25 @@ from fastapi import APIRouter, Request, Depends, Query, Path
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.services.todo_service import TodoService
+from app.services.user_service import UserService
 from app.controllers.todo_controller import TodoController
+from app.controllers.auth_controller import AuthController
 from app.schemas.todo_schema import TodoCreateSchema, TodoUpdateSchema
+from fastapi.security import OAuth2PasswordRequestForm
 
 router = APIRouter()
 
 todo_service = TodoService()
+user_service = UserService()
 todo_controller = TodoController(todo_service)
+auth_controller = AuthController(user_service)
+
+# -----------------------------------------------------
+# Login route
+# -----------------------------------------------------
+@router.post("/login")
+def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    return auth_controller.login(db, form_data)
 
 # -----------------------------------------------------
 # LIST WITH FILTERS
@@ -71,4 +83,3 @@ def revoke_todo(
     db: Session = Depends(get_db)
 ):
     return todo_controller.revoke(todo_id, db)
-
