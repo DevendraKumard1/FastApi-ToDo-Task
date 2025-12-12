@@ -6,8 +6,8 @@ from app.core.config import get_settings
 settings = get_settings()
 
 SQLALCHAMY_DATABASE_URL = (
-    f"mysql+pymysql://{settings.DB_USER}:{settings.DB_PASSWORD}"
-    f"@{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}"
+    f"mysql+pymysql://{settings.MYSQLUSER}:{settings.MYSQLPASSWORD}"
+    f"@{settings.MYSQLHOST}:{settings.MYSQLPORT}/{settings.MYSQLDATABASE}"
 )
 
 engine = create_engine(SQLALCHAMY_DATABASE_URL)
