@@ -14,9 +14,9 @@ config = context.config
 
 # Load settings
 settings = get_settings()
-SQLALCHEMY_DATABASE_URL = (
-    f"mysql+pymysql://{settings.DB_USER}:{settings.DB_PASSWORD}"
-    f"@{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}"
+SQLALCHAMY_DATABASE_URL = (
+    f"mysql+pymysql://{settings.MYSQLUSER}:{settings.MYSQLPASSWORD}"
+    f"@{settings.MYSQLHOST}:{settings.MYSQLPORT}/{settings.MYSQLDATABASE}"
 )
 
 config.set_main_option("sqlalchemy.url", SQLALCHEMY_DATABASE_URL)
