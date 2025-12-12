@@ -21,8 +21,10 @@ class Settings(BaseSettings):
 
     REDIS_URL: str | None = None
 
-    class Config:
-        env_file = ".env"
+    model_config = {
+        "env_file": ".env",
+        "extra": "ignore"
+    }
 
 @lru_cache()
 def get_settings():
