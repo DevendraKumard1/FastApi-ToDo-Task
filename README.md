@@ -39,3 +39,14 @@ python -m app.seed
 # or
 # alembic upgrade head
 
+8. **Migration railway via command**:
+# Run migration and seeder on Production
+
+railway login
+railway link  
+railway run alembic upgrade head
+railway run python -m alembic upgrade head
+railway run python -m app.seed
+
+# Connect railway database on terminal
+mysql -u root -p -h hopper.proxy.rlwy.net -P 23795
