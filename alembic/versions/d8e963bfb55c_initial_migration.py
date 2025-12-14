@@ -1,8 +1,8 @@
-"""uuid added to users table
+"""initial migration
 
-Revision ID: 6d75084509c3
-Revises: 6a3f6cc10419
-Create Date: 2025-12-04 01:18:05.766214
+Revision ID: d8e963bfb55c
+Revises: 
+Create Date: 2025-12-14 12:21:44.347632
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import mysql
 
 # revision identifiers, used by Alembic.
-revision: str = '6d75084509c3'
-down_revision: Union[str, Sequence[str], None] = '6a3f6cc10419'
+revision: str = 'd8e963bfb55c'
+down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

@@ -27,7 +27,7 @@ class TodoService:
             query = query.filter(Todo.scheduled_date == filters["scheduledDateFilter"])
 
         total = query.count()
-        query = query.order_by(desc(Todo.scheduled_date)).offset(offset).limit(limit)
+        query = query.order_by(desc(Todo.created_at)).offset(offset).limit(limit)
         todos = query.all()
 
         return {
