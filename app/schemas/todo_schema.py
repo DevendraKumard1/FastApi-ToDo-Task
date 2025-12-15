@@ -1,26 +1,44 @@
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, Field, field_validator
 from pydantic_core import PydanticCustomError
 from datetime import date, datetime
 from typing import Optional
 
+
+# ---------------------------
+# CREATE
+# ---------------------------
 class TodoCreateSchema(BaseModel):
     user_id: int
     title: str = Field(..., min_length=2)
-    scheduled_date: date = Field(..., description="Date when todo is scheduled")
-    priority: str = Field("low", description="Priority must be: low, medium, high")
-    status: Optional[str] = Field("pending", description="Status: pending, in-progress, completed, hold, revoked")
+    scheduled_date: date
+    priority: str = Field("low")
+    status: str = Field("pending")
     description: Optional[str] = None
 
     @field_validator("priority")
-    def validate_priority(cls, validate):
+    def validate_priority(cls, v):
         allowed = ["low", "medium", "high"]
-        if validate not in allowed:
+        if v not in allowed:
             raise PydanticCustomError(
                 "priority.invalid",
                 f"Priority must be one of {allowed}"
             )
-        return validate
+        return v
 
+    @field_validator("status")
+    def validate_status(cls, v):
+        allowed = ["pending", "in_progress", "completed", "hold", "revoked"]
+        if v not in allowed:
+            raise PydanticCustomError(
+                "status.invalid",
+                f"Status must be one of {allowed}"
+            )
+        return v
+
+
+# ---------------------------
+# UPDATE
+# ---------------------------
 class TodoUpdateSchema(BaseModel):
     title: Optional[str] = Field(None, min_length=2)
     scheduled_date: Optional[date] = None
@@ -29,30 +47,33 @@ class TodoUpdateSchema(BaseModel):
     description: Optional[str] = None
 
     @field_validator("priority")
-    def validate_priority(cls, validate):
-        if validate is None:
-            return validate
+    def validate_priority(cls, v):
+        if v is None:
+            return v
         allowed = ["low", "medium", "high"]
-        if validate not in allowed:
+        if v not in allowed:
             raise PydanticCustomError(
                 "priority.invalid",
                 f"Priority must be one of {allowed}"
             )
-        return validate
+        return v
 
     @field_validator("status")
-    def validate_status(cls, validate):
-        if validate is None:
-            return validate
+    def validate_status(cls, v):
+        if v is None:
+            return v
         allowed = ["pending", "in_progress", "completed", "hold", "revoked"]
-        if validate not in allowed:
+        if v not in allowed:
             raise PydanticCustomError(
                 "status.invalid",
                 f"Status must be one of {allowed}"
             )
-        return validate
+        return v
 
 
+# ---------------------------
+# RESPONSE
+# ---------------------------
 class TodoResponse(BaseModel):
     id: int
     uuid: str
@@ -63,8 +84,7 @@ class TodoResponse(BaseModel):
     status: str
     description: Optional[str]
     created_at: datetime
-    updated_at: datetime
+    updated_at: Optional[datetime]
     deleted_at: Optional[datetime]
 
     model_config = {"from_attributes": True}
-
